@@ -21,8 +21,8 @@ class HTMLNode:
         return text_representation
     
 class LeafNode(HTMLNode):
-    def __init__(self,tag,value,leaf_props=None):
-        super().__init__(tag,value,props=leaf_props)
+    def __init__(self,tag,value,props=None):
+        super().__init__(tag,value,None,props)
 
     def to_html(self):
         if not self.value:
@@ -30,3 +30,17 @@ class LeafNode(HTMLNode):
         if not self.tag:
             return f"{self.value}"
         return f'<{self.tag}{self.props_to_html}>{self.value}</{self.tag}>'
+    
+class ParentNode(HTMLNode):
+    def __init__(self,tag,children,props=None):
+        super().__init__(tag,None,children,props)
+    
+    def to_html(self):
+        if not self.tag:
+            raise ValueError("Tag must be present for Parent Nodes")
+        if not self.children:
+            raise ValueError("Parent nodes must have one or more Child Nodes")
+        child_strings = []
+        for child in self.children:
+            child_strings.append(child.to_html())
+        return f'<{self.tag}{super().props_to_html()}>{"".join(child_strings)}</{self.tag}>'
