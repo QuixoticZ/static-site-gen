@@ -1,5 +1,7 @@
 print("# hello world")
 from textnode import TextNode 
+from htmlnode import HTMLNode,LeafNode,ParentNode
+
 
 def main():
     print("in main")
@@ -7,5 +9,6 @@ def main():
     text_rept = testTextNode.__repr__
     print(text_rept)
     return None
+
 
 main()
