@@ -40,9 +40,9 @@ class ParentNode(HTMLNode):
             raise ValueError("Tag must be present for Parent Nodes")
         if not self.children:
             raise ValueError("Parent nodes must have one or more Child Nodes")
-        child_html=""
+        child_strings = []
         for child in self.children:
-            child_html +=child.to_html()
-        return f"<{self.tag}{self.props_to_html()}>{child_html}</{self.tag}>"
+            child_strings.append(child.to_html())
+        return f'<{self.tag}{super().props_to_html()}>{"".join(child_strings)}</{self.tag}>'
     
 

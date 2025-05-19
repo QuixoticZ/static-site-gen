@@ -43,11 +43,11 @@ def block_to_block_type(block):
 
 def text_to_children(text):
     text_nodes=text_to_textnodes(text)
-    html_nodes=[]
+    children=[]
     for node in text_nodes:
         html_node=text_node_to_html_node(node)
-        html_nodes.append(html_node)
-    return html_nodes
+        children.append(html_node)
+    return children
 
 def list_rows(block):
     pass
@@ -68,8 +68,7 @@ def block_to_html_node_quote(block):
         new_lines.append(line.lstrip(">").strip())
     content = " ".join(new_lines)
     children = text_to_children(content)
-    new_parent=ParentNode(f"blockquote",text_to_children(children))
-    return new_parent
+    return ParentNode("blockquote", children)
 
 def block_to_html_node_unordered_list(block):
     items = block.split("\n")
@@ -77,8 +76,8 @@ def block_to_html_node_unordered_list(block):
     for item in items:
         text = item[2:]
         children = text_to_children(text)
-        html_items.append(ParentNode("ul", children))
-    new_parent=ParentNode("ol",text_to_children(html_items))
+        html_items.append(ParentNode("li", children))
+    new_parent=ParentNode("ul",html_items)
     return new_parent
 
 def block_to_html_node_ordered_list(block):
@@ -88,13 +87,17 @@ def block_to_html_node_ordered_list(block):
         text = item[3:]
         children = text_to_children(text)
         html_items.append(ParentNode("li", children))
-    new_parent=ParentNode("ol",text_to_children(html_items))
+    new_parent=ParentNode("ol",html_items)
     return new_parent
 
 def block_to_html_node_code(block):
-    code_node=TextNode(block,TextType.CODE)
-    new_parent=ParentNode("code",text_node_to_html_node(code_node))
-    return new_parent
+    if not block.startswith("```") or not block.endswith("```"):
+        raise ValueError("invalid code block")
+    text = block[4:-3]
+    raw_text_node = TextNode(text, TextType.TEXT)
+    child = text_node_to_html_node(raw_text_node)
+    code = ParentNode("code", [child])
+    return ParentNode("pre", [code])
 
 def block_to_html_node_paragraph(block):
     lines = block.split("\n")
