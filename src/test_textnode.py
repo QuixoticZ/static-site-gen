@@ -25,18 +25,7 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is a text node", TextType.ITALIC)
         self.assertEqual(node,node2)
 
-    def assertEqual(self,input1,input2):
-        if input1.__eq__(input2) == True:
-            return True
-        else:
-            return False
-        
-    def assertNotEqual(self,input1,input2):
-        if input1.__eq__(input2) == True:
-            return False
-        else:
-            return True
-        
+  
 
 class TestTextNodeToHTMLNode(unittest.TestCase):
     def test_text(self):

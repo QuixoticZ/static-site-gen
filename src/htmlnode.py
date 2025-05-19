@@ -29,7 +29,7 @@ class LeafNode(HTMLNode):
             raise ValueError("LeafNodes require a value")
         if not self.tag:
             return f"{self.value}"
-        return f'<{self.tag}{self.props_to_html}>{self.value}</{self.tag}>'
+        return f'<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>'
     
 class ParentNode(HTMLNode):
     def __init__(self,tag,children,props=None):
@@ -40,9 +40,9 @@ class ParentNode(HTMLNode):
             raise ValueError("Tag must be present for Parent Nodes")
         if not self.children:
             raise ValueError("Parent nodes must have one or more Child Nodes")
-        child_strings = []
+        child_html=""
         for child in self.children:
-            child_strings.append(child.to_html())
-        return f'<{self.tag}{super().props_to_html()}>{"".join(child_strings)}</{self.tag}>'
+            child_html +=child.to_html()
+        return f"<{self.tag}{self.props_to_html()}>{child_html}</{self.tag}>"
     
 
